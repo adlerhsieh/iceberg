@@ -1,5 +1,7 @@
 require "./iceberg/*"
 
 module Iceberg
-  # TODO Put your code here
+  class App < Base
+
+  end
 end
