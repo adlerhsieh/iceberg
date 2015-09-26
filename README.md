@@ -1,41 +1,52 @@
-# iceberg
+# Iceberg (Alpha, Not released)
 
-TODO: Write a description here
+Iceburg is a full-stack web framework in crystal-lang. It is in its very earlier stage and should not be used in production environment.
 
 ## Installation
 
+Create a Crystal project:
 
-Add this to your application's `shard.yml`:
+```
+$ crystal init app my_project_name
+```
+
+Add to your application's `shard.yml`:
 
 ```yaml
 dependencies:
   iceberg:
-    github: [your-github-name]/iceberg
+    github: adlerhsieh/iceberg
 ```
 
+## Starting a Server
 
-## Usage
-
+Create a `app.cr`:
 
 ```crystal
 require "iceberg"
+
+app = Iceberg::App.new
+
+app.run(8080)
+#=> Server is listening to port 8080
 ```
 
+## Routing
 
-TODO: Write usage instructions here
+Before running `app.run(8080)`:
 
-## Development
+```crystal
+app.get "/hello" do
+ "Hello World"
+end
+```
 
-TODO: Write development instructions here
+It will render `Hello World` in html when you visit "/hello".
 
 ## Contributing
 
-1. Fork it ( https://github.com/[your-github-name]/iceberg/fork )
+1. Fork it ( https://github.com/adlerhsieh/iceberg/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
 5. Create a new Pull Request
-
-## Contributors
-
-- [your-github-name](https://github.com/[your-github-name]) Adler - creator, maintainer
