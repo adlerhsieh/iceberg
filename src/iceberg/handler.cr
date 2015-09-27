@@ -16,9 +16,8 @@ module Iceberg
       end
     end
 
-    # check route exists and call Logger
     def log(http_status)
-      puts Logger.new(@request,http_status).result
+      Log.new(@request,http_status)
     end
   end
 end
