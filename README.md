@@ -1,7 +1,5 @@
 # Iceberg (Alpha, Not released)
 
-[![Build Status](https://travis-ci.org/adlerhsieh/iceberg.svg?branch=master)](https://travis-ci.org/adlerhsieh/iceberg)
-
 Iceburg is a full-stack web framework in crystal-lang. It is in its very earlier stage and should not be used in production environment.
 
 ## Requirement
