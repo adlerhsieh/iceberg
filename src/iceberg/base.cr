@@ -3,9 +3,11 @@ require "http/server"
 
 module Iceberg
   class Base
-    getter :route
+    getter :root
+    # getter :route
     def initialize
-      @route = Router.new
+      # @route = Router.new
+      @root = ENV["PWD"]
     end
 
     def run(port=2000)
@@ -14,9 +16,9 @@ module Iceberg
       server.listen
     end
 
-    def get(route, &block : ( -> String))
-      @route.set(route, block)
-    end
+    # def get(route, &block : ( -> String))
+    #   @route.set(route, block)
+    # end
 
     # Sending self to other classes as parameters
     # Classes communicate with each other through instance variables in this class
