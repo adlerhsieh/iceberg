@@ -1,5 +1,16 @@
 Map = {} of String => String
 
+# User can define app routes using Iceberg::Router.
+# 
+# ```crystal
+# Iceberg::Router.draw do |route|
+#   get "/", :app
+#   get "/show", "app#show"
+# end
+# 
+# :app will look for the default "index" action under AppController
+# "app#show" will look for the "show" action under AppController 
+# ```
 module Iceberg
   class Router
 
@@ -8,15 +19,11 @@ module Iceberg
     end
 
     macro get(path, input)
-      {% if input.is_a?(SymbolLiteral) %}
+      {% if input.is_a?(StringLiteral) && input.split("#").size == 2 %}
+        {% split = input.split("#") %}
+        action = {{split[0].capitalize.id}}Controller.new.{{split[1].id}}
+      {% else %}
         action = {{input.capitalize.id}}Controller.new.index
-      {% elsif input.is_a?(StringLiteral) %}
-        {% if input.split("#").size == 2 %}
-          {% split = input.split("#") %}
-          action = {{split[0].capitalize.id}}Controller.new.{{split[1].id}}
-        {% else %}
-          action = {{input.capitalize.id}}Controller.new.index
-        {% end %}
       {% end %}
       Map[{{path}}] = action
     end
