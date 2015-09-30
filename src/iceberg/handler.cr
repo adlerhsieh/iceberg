@@ -3,18 +3,21 @@ require "http/server"
 module Iceberg
   class Handler
     def initialize(@request,@app)
-      # @route = @app.route.map
-      @route = Map
     end
 
     def respond
-      if @route.has_key?(@request.path.to_s)
+      map = is_method?(:get) ? Map::Get : Map::Post
+      if map.has_key?(@request.path.to_s)
         log(200)
-        HTTP::Response.ok("text/html", @route[@request.path.to_s])
+        HTTP::Response.ok("text/html", map[@request.path.to_s])
       else
         log(404)
         HTTP::Response.not_found
       end
+    end
+
+    def is_method?(method : Symbol)
+      @request.method == method.to_s.upcase
     end
 
     def log(http_status)
