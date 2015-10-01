@@ -49,8 +49,7 @@ app.run
 created("/src/#{dir}/config.cr")
 
 File.write("./src/#{dir}/routes.cr",
-"Iceberg::Router.draw do
-  get \"/\", :app
+"Iceberg::Router.draw do\n
 end
 ")
 created("/src/#{dir}/routes.cr")
