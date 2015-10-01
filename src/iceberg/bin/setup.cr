@@ -33,7 +33,8 @@ unless Dir.exists?("src/#{dir}/views")
 end
 
 File.write("./src/#{dir}/controllers/app_controller.cr",
-"class AppController < Iceberg::Controller\n
+"require \"iceberg\"\n
+class AppController < Iceberg::Controller\n
 end")
 created("/src/#{dir}/controllers/app_controller.cr")
 
