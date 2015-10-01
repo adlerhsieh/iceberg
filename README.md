@@ -1,4 +1,4 @@
-# Iceberg (Alpha, Not released)
+# Iceberg (Pre-Alpha)
 
 Iceburg is a full-stack web framework in crystal-lang. It is in its very earlier stage and should not be used in production environment.
 
@@ -11,7 +11,7 @@ At least [Crystal](https://github.com/manastech/crystal) 0.8.0 installed.
 Create a Crystal project:
 
 ```
-$ crystal init app my_project_name
+$ crystal init app project_name
 ```
 
 Add to your application's `shard.yml`:
@@ -22,34 +22,71 @@ dependencies:
     github: adlerhsieh/iceberg
 ```
 
-Run `shards install` to install the package.
+Run `shards` to install the package.
 
-## Starting a Server
+## My First App
 
-Create a `app.cr` in your project root:
+Run setup command from your project root directory:
 
-```crystal
-require "iceberg"
-
-app = Iceberg::App.new
-
-app.run(8080)
-#=> Server is listening to port 8080
+```
+./libs/iceberg/iceberg/bin/setup
 ```
 
-Run `crystal app.cr` to start the server.
+It creates the necessary config files for you.
 
-## Routing
-
-Add:
+Go to `src/project_name/controllers/app_controller.cr`, and add an `index` action:
 
 ```crystal
-app.get "/hello" do
- "Hello World"
+def index
+  "Hello World"
 end
 ```
 
-It will render `Hello World` in html when you visit `/hello`.
+In `src/project_name/routes.cr`, add routing to this `index` action:
+
+```crystal
+# put it in the do...end block
+get "/", :app
+```
+
+And then:
+
+1. Run `./server` command.
+2. Go to `http://localhost:2000`. 
+3. You will see `Hello World`.
+4. Yay!
+
+## Configuration
+
+#### Routing
+
+Route mapping is in `src/project_name/routes.cr` file. Available syntax:
+
+```crystal
+# keep all routing in the do...end block
+get "/", :app #=> route "/" to AppController#index action
+get "/app", "app#index" #=> ditto
+get "/new_app", "app#new" #=> route "/new_app" to AppController#new action
+post "/new_app", "app#new" #=> ditto, but with POST request
+```
+
+#### Controller
+
+Controller actions return the value like ordinary Crystal methods. It only accepts `String` value for now. Returning other values will raise errors. The returned values will be rendered as HTML in browser.
+
+You can create different controller files under `/src/project_name/controllers` directory.
+
+```crystal
+class MyController < Iceberg::Controller
+  def 
+    "<h1>Hello World</h1>"
+  end
+end
+```
+
+#### View
+
+View is not implemented yet. Stay tuned!
 
 ## Contributing
 
