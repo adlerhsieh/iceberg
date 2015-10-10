@@ -3,6 +3,7 @@ require "http/server"
 module Iceberg
   class Handler
     def initialize(@request,@app)
+      @format = check_format
     end
 
     def respond
@@ -18,6 +19,15 @@ module Iceberg
 
     def is_method?(method : Symbol)
       @request.method == method.to_s.upcase
+    end
+
+    def check_format
+      match_json = @request.path.to_s.match(/\.json$/)
+      if match_json
+        return :json
+      else
+        return :html
+      end
     end
 
     def log(http_status)
