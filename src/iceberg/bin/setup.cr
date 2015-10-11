@@ -30,9 +30,10 @@ unless Dir.exists?("src/controllers")
 end
 
 File.write("./src/controllers/app_controller.cr",
-"require \"iceberg\"\n
-class AppController < Iceberg::Controller\n
+"require \"iceberg\"
+class AppController < Iceberg::Controller
   def index
+    view :index
   end
 end")
 created("/src/controllers/app_controller.cr")
@@ -49,9 +50,9 @@ unless Dir.exists?("src/views/app")
 end
 
 File.write("./src/views/app/index.cr",
-"require \"iceberg\"\n
-class AppIndexView < Iceberg::View\n
-  def process
+"require \"iceberg\"
+class AppIndexView < Iceberg::View
+  def process\n
   end
   html :app, :index
 end")
