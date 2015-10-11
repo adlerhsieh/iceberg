@@ -8,13 +8,13 @@ At least [Crystal](https://github.com/manastech/crystal) 0.8.0 installed.
 
 ## Installation
 
-Create a Crystal project:
+##### 1. Create a Crystal project
 
 ```
 $ crystal init app project_name
 ```
 
-Add to your application's `shard.yml`:
+##### 2. Add to `shard.yml`
 
 ```yaml
 dependencies:
@@ -22,36 +22,56 @@ dependencies:
     github: adlerhsieh/iceberg
 ```
 
-Run `shards` to install the package.
+##### 3. Run `shards` command.
 
-## My First App
-
-Run setup command from your project root directory:
-
-```
-./libs/iceberg/iceberg/bin/setup
-```
+##### 4. Run `./libs/iceberg/iceberg/bin/setup` command.
 
 It creates the necessary config files for you.
 
-Go to `src/project_name/controllers/app_controller.cr`, and add an `index` action:
+## My First App
+
+Check `src/controllers/app_controller.cr`. There should be an `index` action.
 
 ```crystal
-def index
-  "Hello World"
+# This is default.
+class AppController < Iceberg::Controller
+  def index
+    view :index
+  end
 end
 ```
 
-In `src/project_name/routes.cr`, add routing to this `index` action:
+And the same in `src/views/app/index.cr`.
 
 ```crystal
-# put it in the do...end block
-get "/", :app
+# This is default.
+class AppIndexView < Iceberg::View
+  def process
+  end
+  html :app, :index
+end
 ```
 
-And then:
+No need to change anything above for our first app.
 
-1. Run `./server` command.
+Now, go to `src/routes.cr` and route root to `AppController`:
+
+```crystal
+Iceberg::Router.draw do
+  # Add this
+  get "/", :app
+end
+```
+
+And add the following to `src/views/app/html/index.ecr`.
+
+```
+Hello World!
+```
+
+Finally:
+
+1. Run `./server` command in root directory.
 2. Go to `http://localhost:2000`. 
 3. You will see `Hello World`.
 4. Yay!
@@ -60,33 +80,96 @@ And then:
 
 #### Routing
 
-Route mapping is in `src/project_name/routes.cr` file. Available syntax:
+Route mapping is in `src/routes.cr` file. Available syntax:
 
 ```crystal
-# keep all routing in the do...end block
-get "/", :app #=> route "/" to AppController#index action
-get "/app", "app#index" #=> ditto
-get "/new_app", "app#new" #=> route "/new_app" to AppController#new action
-post "/new_app", "app#new" #=> ditto, but with POST request
+Iceberg::Router.draw do
+  get "/", :app              #=> route "/" to AppController#index
+  get "/app", "app#index"    #=> ditto
+  get "/new_app", "app#new"  #=> route "/new_app" to AppController#new action
+  post "/new_app", "app#new" #=> ditto, but with POST request
+end
 ```
 
 #### Controller
 
-Controller actions return the value like ordinary Crystal methods. It only accepts `String` value for now. Returning other values will raise errors. The returned values will be rendered as HTML in browser.
+Controller receives http request and decides what to process. It is designed to handle only http requests
+so don't put any business logic here. Leave it to view classes.
 
-You can create different controller files under `/src/project_name/controllers` directory.
+Current functionality:
+
+##### Render HTML
+
+The controller passes the action to `View` and handles all operations there. 
+A `View` returns a string of HTML that will respond to the browser.
+
+The syntax is `view :action`, where Iceberg looks for a view class name contains both
+Controller name and Action name. For example:
 
 ```crystal
 class MyController < Iceberg::Controller
-  def 
-    "<h1>Hello World</h1>"
+  def index
+    # this action looks for MyIndexView in `views` directory 
+    view :index 
   end
 end
 ```
 
+You can either specify another view file.
+
+```crystal
+class MyController < Iceberg::Controller
+  def index
+    # this action looks for MyAppView in `views` directory 
+    view :app
+  end
+end
+```
+
+However, it is recommended to pair the names of a view and controller action together.
+
 #### View
 
-View is not implemented yet. Stay tuned!
+View is where your logic is. It uses `ECR` library to embed Crystal into HTML text.
+The most important part is that it brings instance variables into HTML, like `ERB` in Ruby.
+Check [ECR library usage](https://github.com/manastech/crystal/blob/master/src/ecr/ecr.cr) 
+in Crystal official repo. 
+
+One view class renders one file. This is a little different from Rails in which view is defined 
+in a controller action. The `process` action is necessary since Iceberg takes it as the main function
+in this class, like `func main` in Golang.
+
+It works like this:
+
+```crystal
+class AppIndexView < Iceberg::View
+  def process
+    @name = "John"
+  end
+  html :app, :index
+end
+```
+
+And in your `index.ecr` file: 
+
+```erb
+Hello, <%= @name %>
+```
+
+You will see `Hello, John` in browser.
+
+In addition, it is recommended to organize your view folder structure like:
+
+```
+src
+|--views
+  |--app
+    |--index.cr
+    |--html
+      |--index.ecr
+```
+
+Under the `views` directory, `app` is the name of a controller class, and `index` is its action. The `html` folder contains all `ecr` files.
 
 ## Contributing
 
