@@ -67,14 +67,18 @@ created("/src/views/app/html/index.ecr")
 
 # Config
 File.write("./src/config.cr",
-"require \"./controllers/*\"
-require \"./views/*\"
+"require \"./controllers/**\"
+require \"./views/**\"
 require \"./routes\"
 
 app = Iceberg::App.new
 app.run
 ")
 created("/src/config.cr")
+
+File.open("./src/#{dir}.cr","a"){|file|
+  file.print("\nrequire \"./config.cr\"")
+}
 
 # Routes
 File.write("./src/routes.cr",
