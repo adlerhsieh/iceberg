@@ -3,14 +3,15 @@ require "http/server"
 module Iceberg
   class Handler
     def initialize(@request,@app)
-      @format = check_format
+      @params = Parameters.new(@request)
     end
 
     def respond
       map = is_method?(:get) ? Map::Get : Map::Post
       if map.has_key?(@request.path.to_s)
         log(200)
-        HTTP::Response.ok("text/html", map[@request.path.to_s])
+        HTTP::Response.ok("text/html", map[@request.path.to_s].call)
+        # HTTP::Response.ok("text/html","hello")
       else
         log(404)
         HTTP::Response.not_found
@@ -19,15 +20,6 @@ module Iceberg
 
     def is_method?(method : Symbol)
       @request.method == method.to_s.upcase
-    end
-
-    def check_format
-      match_json = @request.path.to_s.match(/\.json$/)
-      if match_json
-        return :json
-      else
-        return :html
-      end
     end
 
     def log(http_status)
