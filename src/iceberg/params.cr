@@ -1,6 +1,6 @@
 module Iceberg
-  class Parameters
-    getter format
+  class Params
+    property format
     def initialize(@request)
       @format = check_format
     end

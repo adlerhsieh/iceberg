@@ -20,18 +20,10 @@ module Iceberg
       {% if input.is_a?(StringLiteral) && input.split("#").size == 2 %}
         {% split = input.split("#") %}
         new_instance = {{split[0].capitalize.id}}Controller.new
-        action = ->new_instance.{{split[1].id}}
-        # Map::Get[{{path}}] = {
-        #   controller: :{{split[0].id}},
-        #   action:     :{{split[1].id}}
-        # }
+        action = ->new_instance.{{split[1].id}}(Iceberg::Params)
       {% else %}
         new_instance = {{input.capitalize.id}}Controller.new
-        action = ->new_instance.index
-        # Map::Get[{{path}}] = {
-        #   controller: :{{input.id}},
-        #   action:     :index
-        # }
+        action = ->new_instance.index(Iceberg::Params)
       {% end %}
         Map::Get[{{path}}] = action
     end

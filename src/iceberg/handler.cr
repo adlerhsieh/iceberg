@@ -3,14 +3,14 @@ require "http/server"
 module Iceberg
   class Handler
     def initialize(@request,@app)
-      @params = Parameters.new(@request)
+      @params = Iceberg::Params.new(@request)
     end
 
     def respond
       map = is_method?(:get) ? Map::Get : Map::Post
       if map.has_key?(@request.path.to_s)
         log(200)
-        HTTP::Response.ok("text/html", map[@request.path.to_s].call)
+        HTTP::Response.ok("text/html", map[@request.path.to_s].call(@params))
         # HTTP::Response.ok("text/html","hello")
       else
         log(404)
