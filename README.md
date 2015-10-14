@@ -1,6 +1,8 @@
 # Iceberg (Pre-Alpha)
 
-Iceburg is a full-stack web framework in crystal-lang. It is in its very earlier stage and should not be used in production environment.
+Iceberg is a full-stack web framework in crystal-lang. It aims to serve as a MVC framework for developers to quickly create a functional website or software.
+
+NOTE: It is in its very earlier stage and should not be used in production environment. However, feel free to try it out, request features, or report bugs.
 
 ## Requirement
 
@@ -170,6 +172,10 @@ src
 ```
 
 Under the `views` directory, `app` is the name of a controller class, and `index` is its action. The `html` folder contains all `ecr` files.
+
+## Stay Tuned
+
+Everything is still in progress. It will be official released once it's ready!
 
 ## Contributing
 
