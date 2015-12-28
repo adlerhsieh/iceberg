@@ -175,7 +175,7 @@ Under the `views` directory, `app` is the name of a controller class, and `index
 
 ## Stay Tuned
 
-Everything is still in progress. It will be official released once it's ready!
+Everything is still in progress. It will be officially released once it's ready!
 
 ## Contributing
 
